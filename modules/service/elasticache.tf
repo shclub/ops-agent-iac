@@ -31,7 +31,8 @@ resource "aws_vpc_security_group_egress_rule" "elasticache_all" {
 
 resource "aws_elasticache_serverless_cache" "this" {
   count              = local.elasticache_enabled
-  name               = "${local.name}-cache"
+  # 이름 변경은 기존 Serverless cache의 destroy 후 신규 생성으로 이어진다.
+  name               = "${local.name}-cache-v2"
   engine             = "valkey"
   subnet_ids         = aws_subnet.private[*].id
   security_group_ids = [aws_security_group.elasticache[0].id]
@@ -48,7 +49,7 @@ resource "aws_elasticache_serverless_cache" "this" {
     }
   }
 
-  tags = { Name = "${local.name}-cache" }
+  tags = { Name = "${local.name}-cache-v2" }
 }
 
 output "elasticache_endpoint" {
